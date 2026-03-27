@@ -122,13 +122,14 @@ class NXCModule:
             context.log.success(f"Found {len(servers)} SCOM Management Server(s):")
             for server in servers:
                 if server["vulnerable"]:
-                    context.log.success(f"{server['hostname']} - VULNERABLE")
+                    context.log.highlight(f"{server['hostname']} - VULNERABLE")
                 else:
                     context.log.fail(f"{server['hostname']}")
                 
-                # Display SPNs with proper indentation
+                # Display only SCOM-related SPNs with proper indentation
                 for spn in server["spns"]:
-                    context.log.display(f"                 {spn}")
+                    if "MSOMHSvc" in spn or "MSOMSdkSvc" in spn:
+                        context.log.display(f"                 {spn}")
                 
                 if server["os"]:
                     context.log.debug(f"Operating System: {server['os']}")
@@ -219,9 +220,10 @@ class NXCModule:
                 username = user["upn"] if user["upn"] else user["sam"]
                 context.log.success(f"{username}")
                 
-                # Display SPNs with proper indentation
+                # Display only SCOM-related SPNs with proper indentation
                 for spn in user["spns"]:
-                    context.log.display(f"                 {spn}")
+                    if "MSOMHSvc" in spn or "MSOMSdkSvc" in spn:
+                        context.log.display(f"                 {spn}")
                 
                 if user["description"]:
                     context.log.debug(f"Description: {user['description']}")
