@@ -5,12 +5,6 @@ from impacket.ldap.ldapasn1 import SearchResultEntry
 
 
 class NXCModule:
-    """
-    Module by @RyanVoit
-    
-    Based on scomhunter tool's find functionality
-    Enumerates SCOM (System Center Operations Manager) infrastructure via LDAP
-    """
 
     name = "scom"
     description = "Enumerate SCOM infrastructure (Management Servers and SDK Service Accounts)"
@@ -18,20 +12,10 @@ class NXCModule:
     category = CATEGORY.ENUMERATION
 
     def options(self, context, module_options):
-        """
-        No options required.
-        
-        This module will automatically search for:
-        - SCOM Management Servers (computers with MSOMHSvc SPN)
-        - SCOM SDK Service Accounts (users with MSOMSdkSvc SPN)
-        
-        Example:
-        nxc ldap $DC-IP -u Username -p Password -M scom
-        """
+
         pass
 
     def on_login(self, context, connection):
-        """Search for SCOM infrastructure components"""
         
         context.log.display("Starting SCOM infrastructure enumeration...")
         
@@ -126,7 +110,6 @@ class NXCModule:
                 else:
                     context.log.highlight(f"{server['hostname']}")
                 
-                # Display only SCOM-related SPNs with proper indentation (yellow)
                 for spn in server["spns"]:
                     if "MSOMHSvc" in spn or "MSOMSdkSvc" in spn:
                         context.log.highlight(f"      {spn}")
@@ -220,7 +203,6 @@ class NXCModule:
                 username = user["upn"] if user["upn"] else user["sam"]
                 context.log.highlight(f"{username}")
                 
-                # Display only SCOM-related SPNs with proper indentation (yellow)
                 for spn in user["spns"]:
                     if "MSOMHSvc" in spn or "MSOMSdkSvc" in spn:
                         context.log.highlight(f"      {spn}")
