@@ -124,12 +124,12 @@ class NXCModule:
                 if server["vulnerable"]:
                     context.log.highlight(f"{server['hostname']} - VULNERABLE")
                 else:
-                    context.log.fail(f"{server['hostname']}")
+                    context.log.highlight(f"{server['hostname']}")
                 
-                # Display only SCOM-related SPNs with proper indentation
+                # Display only SCOM-related SPNs with proper indentation (yellow)
                 for spn in server["spns"]:
                     if "MSOMHSvc" in spn or "MSOMSdkSvc" in spn:
-                        context.log.display(f"                 {spn}")
+                        context.log.highlight(f"             {spn}")
                 
                 if server["os"]:
                     context.log.debug(f"Operating System: {server['os']}")
@@ -218,12 +218,12 @@ class NXCModule:
             context.log.success(f"Found {len(users)} SCOM SDK Service Account(s):")
             for user in users:
                 username = user["upn"] if user["upn"] else user["sam"]
-                context.log.success(f"{username}")
+                context.log.highlight(f"{username}")
                 
-                # Display only SCOM-related SPNs with proper indentation
+                # Display only SCOM-related SPNs with proper indentation (yellow)
                 for spn in user["spns"]:
                     if "MSOMHSvc" in spn or "MSOMSdkSvc" in spn:
-                        context.log.display(f"                 {spn}")
+                        context.log.highlight(f"             {spn}")
                 
                 if user["description"]:
                     context.log.debug(f"Description: {user['description']}")
